@@ -10,10 +10,12 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import type { Response } from 'express';
-import { convertToHtml } from 'mammoth';
+import { UploadService } from './upload.service';
 
 @Controller()
 export class UploadController {
+  constructor(private readonly uploadService: UploadService) {}
+
   @Post()
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
@@ -33,7 +35,7 @@ export class UploadController {
     )
     file: Express.Multer.File,
   ) {
-    const { value: html } = await convertToHtml({ buffer: file.buffer });
+    const html = await this.uploadService.convertDocxToHtml(file.buffer);
     res.set({
       'Content-Type': 'text/html',
       'Content-Disposition': 'attachment; filename="index.html"',
