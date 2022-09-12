@@ -12,7 +12,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import type { Response } from 'express';
 import { convertToHtml } from 'mammoth';
 
-@Controller('upload')
+@Controller()
 export class UploadController {
   @Post()
   @UseInterceptors(FileInterceptor('file'))
